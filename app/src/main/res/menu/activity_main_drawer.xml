@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_now_playing"
+            android:icon="@drawable/ic_movie_black_24dp"
+            android:title="Now Playing" />
+        <item
+            android:id="@+id/nav_top_rated"
+            android:icon="@drawable/ic_movie_black_24dp"
+            android:title="Top Rated" />
+        <item
+            android:id="@+id/nav_up_coming"
+            android:icon="@drawable/ic_movie_black_24dp"
+            android:title="Coming Soon" />
+
+    </group>
+
+    <item android:title="Let your friends know">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+</menu>
