@@ -6,20 +6,37 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import net.topan_xt.movielist.adapter.MoviesAdapter;
+import net.topan_xt.movielist.api.ApiClient;
+import net.topan_xt.movielist.model.MoviesResponse;
+import net.topan_xt.movielist.model.ResultsItem;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.drawer_layout) DrawerLayout mDrawer;
     @BindView(R.id.nav_view) NavigationView mNavigationView;
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.rv_place) RecyclerView mRecyclerView;
+    @BindView(R.id.progres_bar) ProgressBar mProgressBar;
+
+    private final static String API_KEY = "671ee92ab3a0f7e022724ce32cf06a93";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +51,31 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
+
+        initView();
+    }
+
+    void initView(){
+        Call<MoviesResponse> call = ApiClient.getService().getTopRatedMovies(API_KEY);
+
+        call.enqueue(new Callback<MoviesResponse>() {
+            @Override
+            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                mProgressBar.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(mNavigationView.VISIBLE);
+
+                List<ResultsItem> movies = response.body().getResults();
+
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+                mRecyclerView.setAdapter(new MoviesAdapter(movies, R.layout.row_content, getApplicationContext()));
+            }
+
+            @Override
+            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
+                Toast.makeText(MainActivity.this, "Request data error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
