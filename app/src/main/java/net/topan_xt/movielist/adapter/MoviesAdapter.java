@@ -1,6 +1,8 @@
 package net.topan_xt.movielist.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +17,8 @@ import com.squareup.picasso.Picasso;
 
 import net.topan_xt.movielist.R;
 import net.topan_xt.movielist.model.ResultsItem;
+import net.topan_xt.movielist.model.moviedetail.MovieDetailResponse;
+import net.topan_xt.movielist.module.detail.DetailMovieActivity;
 
 import java.util.List;
 
@@ -51,13 +55,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     @Override
     public void onBindViewHolder(MoviesAdapter.MovieViewHolder holder, final int position) {
         holder.mTextTitle.setText(movies.get(position).getTitle());
+        holder.mTextRating.setText(String.valueOf(movies.get(position).getVoteAverage())+" ");
         Picasso.with(context).load("https://image.tmdb.org/t/p/w185_and_h278_bestv2"+movies.get(position).getPosterPath()).into(holder.mImagePoster);
-        Log.d(TAG, "onBindViewHolder: "+movies.get(position).getPosterPath());
 
         holder.mRowMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, ""+movies.get(position).getId(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, ""+movies.get(position).getId(), Toast.LENGTH_SHORT).show();
                 toDetail(movies.get(position).getId());
             }
         });
@@ -65,7 +69,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
 
     public void toDetail(int id){
-
+        Intent mDetail = new Intent(context, DetailMovieActivity.class);
     }
 
     @Override
@@ -78,6 +82,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         @BindView(R.id.title) TextView mTextTitle;
         @BindView(R.id.img_poster) ImageView mImagePoster;
         @BindView(R.id.row_movie) CardView mRowMovie;
+        @BindView(R.id.txt_rating) TextView mTextRating;
+        Context context;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
