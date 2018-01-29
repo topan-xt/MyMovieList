@@ -1,5 +1,6 @@
 package net.topan_xt.movielist.module.toprated;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,8 @@ import net.topan_xt.movielist.adapter.MoviesAdapter;
 import net.topan_xt.movielist.api.ApiClient;
 import net.topan_xt.movielist.model.MoviesResponse;
 import net.topan_xt.movielist.model.ResultsItem;
+import net.topan_xt.movielist.module.home.HomeActivity;
+import net.topan_xt.movielist.util.Constant;
 
 import java.util.List;
 
@@ -35,9 +38,8 @@ import retrofit2.Response;
 public class TopRatedFragment extends Fragment {
 
     @BindView(R.id.rv_place) RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
 
-    private final static String API_KEY = "671ee92ab3a0f7e022724ce32cf06a93";
+    private ProgressDialog dialog;
 
     @Nullable
     @Override
@@ -45,16 +47,21 @@ public class TopRatedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_content, container, false);
         ButterKnife.bind(this,view);
 
+        onLoading();
         initView();
         return view;
     }
 
+    public void onLoading(){
+        dialog = ProgressDialog.show(getContext(), "","Please Wait while loading data", true);
+    }
+
     void initView(){
-        Call<MoviesResponse> call = ApiClient.getService().getTopRatedMovies(API_KEY);
+        Call<MoviesResponse> call = ApiClient.getService().getTopRatedMovies(Constant.API_KEY);
         call.enqueue(new Callback<MoviesResponse>() {
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
-                mProgressBar.setVisibility(View.GONE);
+                dialog.dismiss();
                 mRecyclerView.setVisibility(View.VISIBLE);
 
                 List<ResultsItem> movies = response.body().getResults();
@@ -65,7 +72,7 @@ public class TopRatedFragment extends Fragment {
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
+                dialog.dismiss();
                 Toast.makeText(getContext(), "Request data error", Toast.LENGTH_SHORT).show();
             }
         });

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.topan_xt.movielist.MainActivity">
+    tools:context=".module.home.HomeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -17,15 +17,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
-            <TextView
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:id="@+id/tv_title_bar"
-                android:textColor="@color/colorWhite"
-                android:gravity="center"
-                android:text="My Movie List"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

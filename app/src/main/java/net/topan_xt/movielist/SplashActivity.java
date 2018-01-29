@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import net.topan_xt.movielist.module.home.HomeActivity;
 
@@ -26,7 +27,7 @@ public class SplashActivity extends AppCompatActivity {
         mProgresBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite), PorterDuff.Mode.SRC_IN );
         new CountDownTimer(3000, 1000) {
             @Override
-            public void onTick(long l) {
+            public void onTick(long l){
 
             }
 

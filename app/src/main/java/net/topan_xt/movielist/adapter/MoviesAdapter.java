@@ -19,6 +19,7 @@ import net.topan_xt.movielist.R;
 import net.topan_xt.movielist.model.ResultsItem;
 import net.topan_xt.movielist.model.moviedetail.MovieDetailResponse;
 import net.topan_xt.movielist.module.detail.DetailMovieActivity;
+import net.topan_xt.movielist.util.Constant;
 
 import java.util.List;
 
@@ -56,21 +57,18 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public void onBindViewHolder(MoviesAdapter.MovieViewHolder holder, final int position) {
         holder.mTextTitle.setText(movies.get(position).getTitle());
         holder.mTextRating.setText(String.valueOf(movies.get(position).getVoteAverage())+" ");
-        Picasso.with(context).load("https://image.tmdb.org/t/p/w185_and_h278_bestv2"+movies.get(position).getPosterPath()).into(holder.mImagePoster);
+        Picasso.with(context).load(Constant.POSTER_PATH+movies.get(position).getPosterPath()).into(holder.mImagePoster);
 
+        Log.d(TAG, "onBindViewHolder: "+movies.get(position).getId());
         holder.mRowMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // Toast.makeText(context, ""+movies.get(position).getId(), Toast.LENGTH_SHORT).show();
-                toDetail(movies.get(position).getId());
+                //Toast.makeText(context, ""+movies.get(position).getId(), Toast.LENGTH_SHORT).show();
+                context.startActivity(new Intent(context, DetailMovieActivity.class).putExtra("id", movies.get(position).getId()));
             }
         });
     }
 
-
-    public void toDetail(int id){
-        Intent mDetail = new Intent(context, DetailMovieActivity.class);
-    }
 
     @Override
     public int getItemCount() {
@@ -83,7 +81,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         @BindView(R.id.img_poster) ImageView mImagePoster;
         @BindView(R.id.row_movie) CardView mRowMovie;
         @BindView(R.id.txt_rating) TextView mTextRating;
-        Context context;
 
         public MovieViewHolder(View itemView) {
             super(itemView);

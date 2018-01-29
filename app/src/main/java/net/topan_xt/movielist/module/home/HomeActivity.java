@@ -1,5 +1,6 @@
 package net.topan_xt.movielist.module.home;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.topan_xt.movielist.R;
 import net.topan_xt.movielist.module.comingsoon.ComingSoonFragment;
@@ -31,22 +34,20 @@ import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawer;
-    @BindView(R.id.nav_view)
-    NavigationView mNavigationView;
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.tv_title_bar)
-    TextView mTextTitleBar;
+    @BindView(R.id.drawer_layout) DrawerLayout mDrawer;
+    @BindView(R.id.nav_view) NavigationView mNavigationView;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    //@BindView(R.id.tv_title_bar) TextView mTextTitleBar;
 
+    private static final String TAG = "";
+    private String status="nowPlaying";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setSupportActionBar(mToolbar);
         ButterKnife.bind(this);
+        initToolbar();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -57,13 +58,67 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         FragmentManager mFragmentManager = getSupportFragmentManager();
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-        mTextTitleBar.setText("Now Playing");
-
-        mFragmentTransaction.replace(R.id.frame_place, new NowPlayingFragment(), "Now Plang Fragment");
+        mFragmentTransaction.replace(R.id.frame_place, new NowPlayingFragment(), "Now Playing Fragment");
         mFragmentTransaction.commit();
+        mToolbar.setTitle("Now Playing");
 
     }
 
+    private void initToolbar() {
+        setSupportActionBar(mToolbar);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_home_refresh) {
+            onRefresh();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home_action_menu, menu);
+        return true;
+    }
+
+    public void onRefresh(){
+       if(status.equals("nowPlaying")){
+           FragmentManager mFragmentManager = getSupportFragmentManager();
+           FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+           mToolbar.setTitle("Now Playing");
+
+           mFragmentTransaction.replace(R.id.frame_place, new NowPlayingFragment(), "Now Plang Fragment");
+           mFragmentTransaction.commit();
+
+       } else if (status.equals("topRated")) {
+           FragmentManager mFragmentManager = getSupportFragmentManager();
+           FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+           mToolbar.setTitle("Top Rated");
+
+           mFragmentTransaction.replace(R.id.frame_place, new TopRatedFragment(), "Top Rated Fragment");
+           mFragmentTransaction.commit();
+
+       }else if (status.equals("popular")) {
+           FragmentManager mFragmentManager = getSupportFragmentManager();
+           FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+           mToolbar.setTitle("Popular");
+
+           mFragmentTransaction.replace(R.id.frame_place, new PopularFragment(), "Popular Fragment");
+           mFragmentTransaction.commit();
+
+       }else if (status.equals("upComing")) {
+           FragmentManager mFragmentManager = getSupportFragmentManager();
+           FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+           mToolbar.setTitle("Coming Soon");
+
+           mFragmentTransaction.replace(R.id.frame_place, new ComingSoonFragment(), "Coming Soon Fragment");
+           mFragmentTransaction.commit();
+       }
+    }
 
     @Override
     public void onBackPressed() {
@@ -74,27 +129,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -102,34 +136,38 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_now_playing) {
+        if (id == R.id.nav_home) {
+            status ="nowPlaying";
             FragmentManager mFragmentManager = getSupportFragmentManager();
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mTextTitleBar.setText("Now Playing");
+            mToolbar.setTitle("Now Playing");
 
             mFragmentTransaction.replace(R.id.frame_place, new NowPlayingFragment(), "Now Plang Fragment");
             mFragmentTransaction.commit();
 
         } else if (id == R.id.nav_top_rated) {
+            status ="topRated";
             FragmentManager mFragmentManager = getSupportFragmentManager();
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mTextTitleBar.setText("Top Rated");
+            mToolbar.setTitle("Top Rated");
 
             mFragmentTransaction.replace(R.id.frame_place, new TopRatedFragment(), "Top Rated Fragment");
             mFragmentTransaction.commit();
 
         } else if (id == R.id.nav_popular) {
+            status ="popular";
             FragmentManager mFragmentManager = getSupportFragmentManager();
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mTextTitleBar.setText("Popular");
+            mToolbar.setTitle("Popular");
 
             mFragmentTransaction.replace(R.id.frame_place, new PopularFragment(), "Popular Fragment");
             mFragmentTransaction.commit();
 
         } else if (id == R.id.nav_up_coming) {
+            status ="upComing";
             FragmentManager mFragmentManager = getSupportFragmentManager();
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mTextTitleBar.setText("Coming Soon");
+            mToolbar.setTitle("Coming Soon");
 
             mFragmentTransaction.replace(R.id.frame_place, new ComingSoonFragment(), "Coming Soon Fragment");
             mFragmentTransaction.commit();
@@ -138,4 +176,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

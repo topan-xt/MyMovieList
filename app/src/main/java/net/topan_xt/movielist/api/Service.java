@@ -1,8 +1,7 @@
 package net.topan_xt.movielist.api;
 
 import net.topan_xt.movielist.model.MoviesResponse;
-
-import java.util.List;
+import net.topan_xt.movielist.model.moviedetail.MovieDetailResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -30,5 +29,5 @@ public interface Service {
     Call<MoviesResponse> getComingSoon(@Query("api_key") String apiKey);
 
     @GET("movie/{id}")
-    Call<MoviesResponse> getMovieDetails (@Path("id")int id, @Query("api_key") String apiKey);
+    Call<MovieDetailResponse> getMovieDetails (@Path("id")int id, @Query("api_key") String apiKey);
 }
