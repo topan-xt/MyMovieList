@@ -25,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,8 +37,7 @@ import retrofit2.Response;
  *************************************************/
 
 public class PopularFragment extends Fragment {
-    @BindView(R.id.rv_place)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.rv_place) RecyclerView mRecyclerView;
 
     private ProgressDialog dialog;
     private  View view;

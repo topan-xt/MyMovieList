@@ -1,6 +1,5 @@
 package net.topan_xt.movielist.module.home;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -12,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import net.topan_xt.movielist.R;
@@ -73,6 +70,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (item.getItemId() == R.id.action_home_refresh) {
             onRefresh();
             return true;
+            
         } else {
             return super.onOptionsItemSelected(item);
         }
