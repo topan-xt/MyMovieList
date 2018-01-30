@@ -1,7 +1,9 @@
 package net.topan_xt.movielist.api;
 
+import net.topan_xt.movielist.model.cast.CastResponse;
 import net.topan_xt.movielist.model.general.MoviesResponse;
 import net.topan_xt.movielist.model.moviedetail.MovieDetailResponse;
+import net.topan_xt.movielist.model.review.ReviewsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -30,4 +32,10 @@ public interface Service {
 
     @GET("movie/{id}")
     Call<MovieDetailResponse> getMovieDetails (@Path("id")int id, @Query("api_key") String apiKey);
+
+    @GET("movie/{movie_id}/credits")
+    Call<CastResponse>getCasts(@Path("movie_id")int id, @Query("api_key") String apiKey);
+
+    @GET("movie/{movie_id}/reviews")
+    Call<ReviewsResponse>getReviews(@Path("movie_id")int id, @Query("api_key") String apiKey);
 }
