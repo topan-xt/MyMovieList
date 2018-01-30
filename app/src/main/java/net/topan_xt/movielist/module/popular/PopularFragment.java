@@ -4,28 +4,25 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import net.topan_xt.movielist.R;
 import net.topan_xt.movielist.adapter.MoviesAdapter;
 import net.topan_xt.movielist.api.ApiClient;
-import net.topan_xt.movielist.model.MoviesResponse;
-import net.topan_xt.movielist.model.ResultsItem;
-import net.topan_xt.movielist.module.home.HomeActivity;
+import net.topan_xt.movielist.model.general.MoviesResponse;
+import net.topan_xt.movielist.model.general.ResultsItem;
 import net.topan_xt.movielist.util.Constant;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +35,7 @@ import retrofit2.Response;
 
 public class PopularFragment extends Fragment {
     @BindView(R.id.rv_place) RecyclerView mRecyclerView;
+    @BindView(R.id.ll_fragment_error) LinearLayout mLayoutError;
 
     private ProgressDialog dialog;
     private  View view;
@@ -58,6 +56,7 @@ public class PopularFragment extends Fragment {
     }
 
     public void initView(){
+        mLayoutError.setVisibility(View.GONE);
         Call<MoviesResponse> call = ApiClient.getService().getPopular(Constant.API_KEY);
         call.enqueue(new Callback<MoviesResponse>() {
             @Override
@@ -73,6 +72,7 @@ public class PopularFragment extends Fragment {
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                mLayoutError.setVisibility(View.VISIBLE);
                 dialog.dismiss();
                 Toast.makeText(getContext(), "Request data error", Toast.LENGTH_SHORT).show();
             }

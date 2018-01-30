@@ -1,4 +1,4 @@
-package net.topan_xt.movielist.model;
+package net.topan_xt.movielist.model.general;
 
 import java.util.List;
 import javax.annotation.Generated;

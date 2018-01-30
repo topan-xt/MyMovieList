@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -39,6 +38,7 @@ public class DetailMovieActivity extends AppCompatActivity {
     @BindView(R.id.text_detail_movie_releasedate) TextView mTextReleaseDate;
     @BindView(R.id.text_detail_movie_runtime) TextView mTextRunTime;
     @BindView(R.id.toolbar_detail_activity) Toolbar mToolbar;
+    @BindView(R.id.ll_detail_error)LinearLayout mLayoutError;
 
     private int mID;
     ProgressDialog dialog;
@@ -78,9 +78,6 @@ public class DetailMovieActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_share) {
             shareMovie();
             return true;
-        } else if(item.getItemId() == R.id.action_favorite) {
-            Toast.makeText(this, "Favorite Clicked", Toast.LENGTH_SHORT).show();
-            return true;
         } else if(item.getItemId() == R.id.action_refresh){
             getDetailMovie(mID);
             return true;
@@ -97,12 +94,12 @@ public class DetailMovieActivity extends AppCompatActivity {
         startActivity(sendIntent);
     }
 
-
     public void onLoading(){
         dialog = ProgressDialog.show(this, "","Please Wait while loading data", true);
     }
 
     public void getDetailMovie(int id){
+        mLayoutError.setVisibility(View.GONE);
         onLoading();
         Call<MovieDetailResponse> call = ApiClient.getService().getMovieDetails(id, Constant.API_KEY);
         call.enqueue(new Callback<MovieDetailResponse>() {
@@ -140,6 +137,7 @@ public class DetailMovieActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MovieDetailResponse> call, Throwable t) {
+                mLayoutError.setVisibility(View.VISIBLE);
                 mToolbar.setTitle("Error occured");
                 dialog.dismiss();
             }

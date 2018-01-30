@@ -1,7 +1,6 @@
 package net.topan_xt.movielist.module.nowplaying;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +21,9 @@ import com.squareup.picasso.Picasso;
 import net.topan_xt.movielist.R;
 import net.topan_xt.movielist.adapter.MoviesAdapter;
 import net.topan_xt.movielist.api.ApiClient;
-import net.topan_xt.movielist.model.MoviesResponse;
-import net.topan_xt.movielist.model.ResultsItem;
+import net.topan_xt.movielist.model.general.MoviesResponse;
+import net.topan_xt.movielist.model.general.ResultsItem;
 import net.topan_xt.movielist.module.detail.DetailMovieActivity;
-import net.topan_xt.movielist.module.home.HomeActivity;
 import net.topan_xt.movielist.util.Constant;
 
 import java.util.List;
@@ -50,6 +48,7 @@ public class NowPlayingFragment extends Fragment {
     @BindView(R.id.tv_header_title) TextView mTexHeaderTitle;
     @BindView(R.id.txt_overview) TextView mTextHeaderOverview;
     @BindView(R.id.img_backdrop) ImageView mImageBackdrop;
+    @BindView(R.id.ll_home_error) LinearLayout mLayoutError;
 
     private ProgressDialog dialog;
 
@@ -69,6 +68,7 @@ public class NowPlayingFragment extends Fragment {
     }
 
     public void initView(){
+        mLayoutError.setVisibility(View.GONE);
         Call<MoviesResponse> call = ApiClient.getService().getNowPlaying(Constant.API_KEY);
         call.enqueue(new Callback<MoviesResponse>() {
             @Override
@@ -85,6 +85,7 @@ public class NowPlayingFragment extends Fragment {
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                mLayoutError.setVisibility(View.VISIBLE);
                 dialog.dismiss();
                 Toast.makeText(getContext(), "Request data error", Toast.LENGTH_SHORT).show();
             }

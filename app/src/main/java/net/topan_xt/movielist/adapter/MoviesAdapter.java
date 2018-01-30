@@ -14,8 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import net.topan_xt.movielist.R;
-import net.topan_xt.movielist.model.ResultsItem;
-import net.topan_xt.movielist.model.moviedetail.MovieDetailResponse;
+import net.topan_xt.movielist.model.general.ResultsItem;
 import net.topan_xt.movielist.module.detail.DetailMovieActivity;
 import net.topan_xt.movielist.util.Constant;
 

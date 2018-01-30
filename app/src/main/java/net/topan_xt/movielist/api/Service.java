@@ -1,6 +1,6 @@
 package net.topan_xt.movielist.api;
 
-import net.topan_xt.movielist.model.MoviesResponse;
+import net.topan_xt.movielist.model.general.MoviesResponse;
 import net.topan_xt.movielist.model.moviedetail.MovieDetailResponse;
 
 import retrofit2.Call;
