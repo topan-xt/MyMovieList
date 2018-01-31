@@ -38,4 +38,7 @@ public interface Service {
 
     @GET("movie/{movie_id}/reviews")
     Call<ReviewsResponse>getReviews(@Path("movie_id")int id, @Query("api_key") String apiKey);
+
+    @GET("movie/{movie_id}/videos")
+    Call<ReviewsResponse>getVideos(@Path("movie_id")int id, @Query("api_key") String apiKey);
 }

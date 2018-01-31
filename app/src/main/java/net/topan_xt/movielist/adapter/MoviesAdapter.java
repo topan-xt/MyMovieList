@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.content.ContentValues.TAG;
 
 /*************************************************
  * Author     : Topan E.                         *
@@ -56,7 +54,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         holder.mTextRating.setText(String.valueOf(movies.get(position).getVoteAverage())+" ");
         Picasso.with(context).load(Constant.POSTER_PATH+movies.get(position).getPosterPath()).into(holder.mImagePoster);
 
-        Log.d(TAG, "onBindViewHolder: "+movies.get(position).getId());
         holder.mRowMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

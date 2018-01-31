@@ -7,7 +7,6 @@ import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import net.topan_xt.movielist.module.home.HomeActivity;
 

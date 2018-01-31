@@ -24,15 +24,12 @@ import net.topan_xt.movielist.adapter.ReviewAdapter;
 import net.topan_xt.movielist.api.ApiClient;
 import net.topan_xt.movielist.model.cast.CastItem;
 import net.topan_xt.movielist.model.cast.CastResponse;
-import net.topan_xt.movielist.model.cast.CrewItem;
-import net.topan_xt.movielist.model.general.MoviesResponse;
 import net.topan_xt.movielist.model.moviedetail.GenresItem;
 import net.topan_xt.movielist.model.moviedetail.MovieDetailResponse;
 import net.topan_xt.movielist.model.review.ResultsItem;
 import net.topan_xt.movielist.model.review.ReviewsResponse;
 import net.topan_xt.movielist.util.Constant;
 
-import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,6 +37,12 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+/*************************************************
+ * Author     : Topan E.                         *
+ * Contact    : topan.xt@gmail.com               *
+ * Created on : Jan 25, 2018.                    *
+ *************************************************/
 
 public class DetailMovieActivity extends AppCompatActivity {
     private static final String TAG = "";
@@ -67,6 +70,9 @@ public class DetailMovieActivity extends AppCompatActivity {
     RecyclerView mRecyclerViewCast;
     @BindView(R.id.rv_reviews)
     RecyclerView getmRecyclerViewReview;
+    @BindView(R.id.txt_total_review)
+    TextView mTextTotalReview;
+
     ProgressDialog dialog;
     private int mID;
     private String shareContent;
@@ -84,7 +90,6 @@ public class DetailMovieActivity extends AppCompatActivity {
         initToolbar();
         mID = getIntent().getIntExtra("id", 1);
         getDetailMovie(mID);
-        loadCastAndReview(mID);
     }
 
     private void initToolbar() {
@@ -137,14 +142,13 @@ public class DetailMovieActivity extends AppCompatActivity {
         call.enqueue(new Callback<MovieDetailResponse>() {
             @Override
             public void onResponse(Call<MovieDetailResponse> call, Response<MovieDetailResponse> response) {
-                dialog.dismiss();
                 shareContent = "Check this movie out\n" + Constant.WEB_URL + mID;
 
                 MovieDetailResponse movie = response.body();
                 mToolbar.setTitle(movie.getTitle());
                 Picasso.with(getApplicationContext()).load(Constant.BACKDROP_PATH + movie.getBackdropPath()).into(mImageBackdrop);
                 Picasso.with(getApplicationContext()).load(Constant.POSTER_PATH + movie.getPosterPath()).into(mImagePoster);
-                mTextDescription.setText(movie.getOverview());
+                mTextDescription.setText(movie.getTitle()+".\n"+movie.getOverview());
                 String genres = "";
                 for (GenresItem genre : movie.getGenres()) {
                     if ("".equals(genres)) genres = genre.getName();
@@ -165,6 +169,7 @@ public class DetailMovieActivity extends AppCompatActivity {
                     durationString = minute + "m";
                 }
                 mTextRunTime.setText(durationString);
+                loadCastAndReview(mID);
             }
 
             @Override
@@ -214,6 +219,8 @@ public class DetailMovieActivity extends AppCompatActivity {
         call.enqueue(new Callback<ReviewsResponse>() {
             @Override
             public void onResponse(Call<ReviewsResponse> call, Response<ReviewsResponse> response) {
+                mTextTotalReview.setText(response.body().getResults().size()+" review(s)");
+
                 getCastAndReview(cast, response.body().getResults());
             }
 
@@ -225,8 +232,7 @@ public class DetailMovieActivity extends AppCompatActivity {
     }
 
     public void getCastAndReview(final List<CastItem> casts, final List<ResultsItem> review) {
-
-
+        dialog.dismiss();
         if (castAdapter == null) castAdapter = new CastAdapter(casts, this);
         mRecyclerViewCast.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false));
         mRecyclerViewCast.setHasFixedSize(true);
